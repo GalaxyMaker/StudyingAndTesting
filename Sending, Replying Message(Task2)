@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .chat-content { height: 350px; overflow-y: scroll;}
+        .line { margin-top: 10px; display: flex;}
+        .chat-box {background: #eee;padding: spx; max-width: 200px;}
+        .mine {margin-left: auto;}
+    </style>
+</head>
+<body>
+    <div class="chat-content">
+        <div class="line">
+            <span class="chat-box">안녕?</span>
+        </div>
+        <div class="line">
+            <span class="chat-box mine">안녕!</span>
+        </div>
+    </div>
+    <input class="chat-box" id="input">
+    <button id="send">전송</button>
+    <script>
+        function sendMessage() {      
+            const input = document.getElementById('input');
+            const message = input.value;
+            const messageElement = document.createElement('span');
+            messageElement.classList.add('chat-box');
+            messageElement.innerText = message;
+            const line = document.createElement('div');
+            line.classList.add('line');
+            line.appendChild(messageElement);
+            document.querySelector('.chat-content').appendChild(line);
+            input.value = '';
+            setTimeout(sendReply, 1000);
+        }
+        function sendReply() {
+            const replyElement = document.createElement('span');
+            replyElement.classList.add('chat-box', 'mine');
+            replyElement.innerText = '안녕!';
+            const line = document.createElement('div');
+            line.classList.add('line');
+            line.appendChild(replyElement);
+            document.querySelector('.chat-content').appendChild(line);
+        }
+        const sendButton = document.getElementById('send');
+        sendButton.addEventListener('click', sendMessage);
+        const input = document.getElementById('input');
+        input.addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
