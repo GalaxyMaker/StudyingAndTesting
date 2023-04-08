@@ -1,0 +1,10 @@
+        function getBotReply(message) {
+            let reply = "죄송합니다. 이해하지 못했습니다.";
+            for (let keyword in botReply) {
+                if (message.indexOf(keyword) !== -1) {
+                    reply = botReply[keyword];
+                    break;
+                }
+            }
+            return reply;
+        }
