@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .chat-content { height: 350px; overflow-y: scroll;}
+        .line { margin-top: 10px; display: flex;}
+        .chat-box {background: #eee;padding: spx; max-width: 200px;}
+        .mine {margin-left: auto;}
+    </style>
+    <div class="chat-content">
+        <div class="line">
+            <span class="chat-box">안녕?</span>
+        </div>
+        <div class="line">
+            <span class="chat-box mine">안녕!</span>
+        </div>
+    </div>
+    <input class="chat-box" id="input">
+    <button id="send">전송</button>
+
+    <script>
+        const sendButton = document.getElementById('send'); 
+        const inputField = document.getElementById('input'); 
+        const chatContent = document.querySelector('.chat-content'); 
+    
+        sendButton.addEventListener('click', () => {
+          const inputValue = inputField.value; 
+          if (inputValue) { 
+            const chatLine = document.createElement('div'); 
+            chatLine.classList.add('line'); 
+    
+            const chatBox = document.createElement('span'); 
+            chatBox.classList.add('chat-box', 'mine'); 
+            chatBox.innerText = inputValue; 
+    
+            chatLine.appendChild(chatBox); 
+            chatContent.appendChild(chatLine);
+    
+            inputField.value = ''; 
+          }
+        });
+      </script>
+    </body>
+    </html>
+</body>
+</html>
