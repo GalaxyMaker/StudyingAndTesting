@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>채팅창</title>
+	<style>
+		body {
+			background-color: #f2f2f2;
+			font-family: Arial, sans-serif;
+		}
+
+		.chat-box {
+			margin: 50px auto;
+			max-width: 1000px;
+			background-color: #fff;
+			box-shadow: 0px 0px 10px #b0b0b0;
+			border-radius: 5px;
+		}
+
+		.chat-header {
+			padding: 10px;
+			background-color: #4caf50;
+			color: #fff;
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+		}
+
+		.chat-history {
+			height: 300px;
+			overflow-y: scroll;
+			padding: 10px;
+		}
+
+		.chat-message {
+			padding: 5px;
+			margin-bottom: 10px;
+		}
+
+		.chat-message.sent {
+			background-color: #e0f2f1;
+			float: right;
+		}
+
+		.chat-message.received {
+			background-color: #fff;
+			float: left;
+		}
+
+		.chat-message p {
+			margin: 0;
+		}
+
+		.chat-input {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			padding: 10px;
+		}
+
+		.chat-input input {
+			flex: 1;
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			box-shadow: 0px 0px 10px #b0b0b0;
+		}
+
+		.chat-input button {
+			margin-left: 10px;
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			background-color: #4caf50;
+			color: #fff;
+			box-shadow: 0px 0px 10px #b0b0b0;
+			cursor: pointer;
+		}
+        .chat-message.sent {
+            background-color: #e0f2f1;
+            float: right;
+        }
+
+        .chat-message.received {
+            background-color: #fff;
+            float: left;
+        }
+
+	</style>
+</head>
+<body>
+	<div class="chat-box">
+		<div class="chat-header">
+			<h2>채팅창</h2>
+		</div>
+		<div class="chat-history"></div>
+		<div class="chat-input">
+			<input type="text" id="chat-input" placeholder="메시지를 입력하세요..." onkeydown="if (event.keyCode === 13) sendMessage();">
+			<button onclick="sendMessage()">전송</button>
+		</div>
+	</div>
+
+    <script>
+        const chatHistory = document.querySelector('.chat-history');
+        const chatInput = document.querySelector('#chat-input');
+        const sendBtn = document.querySelector('#send-btn');
+
+        const botGreeting = "안녕하세요! 무엇을 도와드릴까요?";
+        const botReply = {
+            "안녕": "안녕하세요!",
+            "오늘 날씨": "오늘은 맑은 날씨입니다.",
+            "심심해": "할 일을 찾아보는 건 어떨까요?",
+            "잘 가": "다음에 또 이용해주세요!",
+            "지금 몇 시야?": getCurrentTime,
+            "오늘은 몇 일이지?": getCurrentDate,
+            "?": "???",
+            "챗봇": "안녕하세요, 챗봇입니다!",
+            "챗": "쳇!"
+		};
+
+		function getCurrentTime() {
+			const now = new Date();
+			const hours = now.getHours();
+			const minutes = now.getMinutes();
+			const seconds = now.getSeconds();
+			return hours + ":" + minutes + ":" + seconds;
+		}
+
+		function getCurrentDate() {
+              const days = ["일", "월", "화", "수", "목", "금", "토"];
+              const date = new Date();
+
+              const year = date.getFullYear(); 
+              const month = date.getMonth() + 1; 
+              const day = date.getDate();
+              const dayOfWeek = days[date.getDay()]; 
+
+              const today = `${year}년 ${month}월 ${day}일 (${dayOfWeek})`;
+              return today;
+        }
+
+        function sendMessage() {
+            const userMessage = chatInput.value;
+            if (userMessage.trim() === "") {
+                return;
+            var usermsg = document.getElementById("usermsg").value;
+			document.getElementById("chat-box").innerHTML += "<p>" + usermsg + "</p>";
+			document.getElementById("chat-box").innerHTML += "<p>챗봇 답변</p>";
+			document.getElementById("#usermsg").value = "";
+            }
+
+            appendMessage(userMessage, 'sent');
+
+            chatInput.value = '';
+            chatInput.focus();
+
+            const botMessage = getBotReply(userMessage);
+            appendMessage(botMessage, 'received');
+        }
+
+        function appendMessage(message, type) {
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add('chat-message', type);
+            const messageText = document.createElement('p');
+            messageText.textContent = message;
+            messageContainer.appendChild(messageText);
+            chatHistory.appendChild(messageContainer);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function getBotReply(message) {
+            let reply = "죄송합니다. 이해하지 못했습니다.";
+
+            if (message.includes("안녕") || message.includes("ㅎㅇ")) {
+                reply = botReply["안녕"];
+            } else if (message.includes("시간")) {
+                reply = getCurrentTime();
+            } else if (message.includes("날짜") || message.includes("몇 요일") || message.includes("몇 월") || message.includes("몇 년") || message.includes("몇 일")) {
+                reply = getCurrentDate();    
+            } else if (message.includes("바보")) {
+                reply = "비속어는 금지입니다!";
+            } else {
+                for (let keyword in botReply) {
+                    if (message.includes(keyword)) {
+                        reply = botReply[keyword];
+                        break;
+                    }
+                }
+            }
+
+            return reply;
+        }
+
+        appendMessage(botGreeting, 'received');
+        chatInput.focus();
+    </script>
+</body>
+</html>
